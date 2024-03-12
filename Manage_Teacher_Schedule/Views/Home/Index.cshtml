@@ -1,0 +1,377 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@{
+    Dictionary<int, string> listDate = ViewData["listDate"] as Dictionary<int, string>;
+    Dictionary<int, List<Schedule>> listschedule = ViewData["schedule"] as Dictionary<int, List<Schedule>>;
+    List<String> dateofweek = ViewData["dateofweek"] as List<String>;
+    Dictionary<int, Schedule> listS = new Dictionary<int, Schedule>();
+    var i = 0;
+
+}
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+<form asp-action="Upload" asp-controller="Home" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        
+  
+<label for="file">Chọn tệp CSV:</label>
+        
+   
+<input type="file" name="file" id="file" class="form-control-file" accept=".csv">
+    
+    <
+</div>
+    <button type="submit" class="btn btn-primary">Tải lên</button>
+</form>
+<table>
+    <thead>
+        <tr>
+            <th rowspan="2">
+                <span class="auto-style1"><strong>Year</strong></span>
+                <select id ="selectYear" onchange="redirectToSelectedDate()">
+                     <option value="2021" selected="@((int)ViewData["year"] == 2021 ? "selected" : null)">2021</option>
+
+                    <option value="2022" selected="@((int)ViewData["year"] == 2022 ? "selected" : null)">2022</option>
+                     <option value="2023" selected="@((int)ViewData["year"] == 2023 ? "selected" : null)">2023</option>
+                   <option value="2024" selected="@((int)ViewData["year"] == 2024 ? "selected" : null)">2024</option>
+          
+                </select>
+                <br>
+                Week
+                <select name="" id="selectDate" onchange="redirectToSelectedDate()">
+                    @foreach(var item in listDate)
+                    {
+                        if ((int)ViewData["weekOfYear"] == item.Key)
+                        {
+                            <option selected="selected" value="@item.Key">@item.Value</option>
+                        }
+                        else
+                        {
+                            <option value="@item.Key">@item.Value</option>
+                        }
+                       
+                        
+                    }
+                   
+                    
+                </select>
+            </th>
+            <th align="center">Mon</th>
+            <th align="center">Tue</th>
+            <th align="center">Wed</th>
+            <th align="center">Thu</th>
+            <th align="center">Fri</th>
+            <th align="center">Sat</th>
+            <th align="center">Sun</th>
+        </tr>
+        <tr>
+            
+           @foreach(var item in dateofweek) {
+              
+
+                <th align="center">@item</th>
+       
+              }
+        </tr>
+    </thead>
+    <tbody>
+          @foreach(var item in ViewData["slots"] as List<Slot>)
+            {
+          
+                <tr>
+
+                <td>Slot @item.SlotId  </td>
+                @foreach (var item1 in ViewData["scheduleoneDateDistinct"] as List<Schedule>)
+                {
+                    if (item.SlotId == item1.SlotId)
+                    {
+                       
+                            <td>
+                                 @foreach (var item2 in listschedule)
+                                {
+                            
+                                if (item.SlotId == item2.Key&&item2.Value.Count!=0)
+                                    {
+                                        @foreach (var s in item2.Value)
+                                        {
+                                            if (s.TeachingDay.DayOfWeek == DayOfWeek.Monday)
+                                            {
+                                                <p>
+
+                                                    <a href="">@s.ClassSubject.SubjectId-</a>
+                                                    <a class="label label-warning" href="http://flm.fpt.edu.vn/gui/role/guest/ListScheduleSyllabus?subjectCode=K%2btqEEAO0OVd6pVpwO3prA%3d%3d&amp;SessionNo=F9EHvqN%2bdUjlw7x5OhB%2faQ%3d%3d&amp;token=" target="_blank">View Materials</a>
+                                                    <br> at @item1.RoomId
+                                                    <a class="label label-primary" target="_blank" href="https://fu-edunext.fpt.edu.vn">-@s.ClassSubject.ClassId </a>
+                                                    <br>(<font color="Green">attended</font>)<br><span class="label label-success">@item.StartTime-@item.EndTime</span>
+                                                    <br><span class="label label-success">@s.TeacherId</span>
+                                                    <br><span class="label label-success">@s.TeachingDay</span>
+                                                    <br><span class="label label-success">@s.SlotId</span>
+                                                    <br>
+                                            </p>
+                                        }
+                                    }
+                                }
+
+
+                                }
+                                                                       
+                                </td>
+                        <td>
+                            @foreach (var item2 in listschedule)
+                            {
+                               
+                                if (item.SlotId == item2.Key && item2.Value.Count != 0)
+                                {
+                                    @foreach (var s in item2.Value)
+                                    {
+                                        if (s.TeachingDay.DayOfWeek == DayOfWeek.Tuesday)
+                                        {
+                                            <p>
+
+                                                <a href="">@s.ClassSubject.SubjectId-</a>
+                                                <a class="label label-warning" href="http://flm.fpt.edu.vn/gui/role/guest/ListScheduleSyllabus?subjectCode=K%2btqEEAO0OVd6pVpwO3prA%3d%3d&amp;SessionNo=F9EHvqN%2bdUjlw7x5OhB%2faQ%3d%3d&amp;token=" target="_blank">View Materials</a>
+                                                <br> at @item1.RoomId
+                                                <a class="label label-primary" target="_blank" href="https://fu-edunext.fpt.edu.vn">-@s.ClassSubject.ClassId </a>
+                                                <br>(<font color="Green">attended</font>)<br><span class="label label-success">@item.StartTime-@item.EndTime</span>
+                                                <br><span class="label label-success">@s.TeacherId</span>
+                                                <br><span class="label label-success">@s.TeachingDay</span>
+                                                <br><span class="label label-success">@s.SlotId</span>
+                                                <br>
+                                            </p>
+                                        }
+                                    }
+                                }
+
+
+
+                            }
+                        
+                        </td>
+                        <td>
+                            @foreach (var item2 in listschedule)
+                            {
+                               
+                                if (item.SlotId == item2.Key && item2.Value.Count != 0)
+                                {
+                                    @foreach (var s in item2.Value)
+                                    {
+                                        if (s.TeachingDay.DayOfWeek == DayOfWeek.Wednesday)
+                                        {
+                                            <p>
+
+                                                <a href="">@s.ClassSubject.SubjectId-</a>
+                                                <a class="label label-warning" href="http://flm.fpt.edu.vn/gui/role/guest/ListScheduleSyllabus?subjectCode=K%2btqEEAO0OVd6pVpwO3prA%3d%3d&amp;SessionNo=F9EHvqN%2bdUjlw7x5OhB%2faQ%3d%3d&amp;token=" target="_blank">View Materials</a>
+                                                <br> at @item1.RoomId
+                                                <a class="label label-primary" target="_blank" href="https://fu-edunext.fpt.edu.vn">-@s.ClassSubject.ClassId </a>
+                                                <br>(<font color="Green">attended</font>)<br><span class="label label-success">@item.StartTime-@item.EndTime</span>
+                                                <br><span class="label label-success">@s.TeacherId</span>
+                                                <br><span class="label label-success">@s.TeachingDay</span>
+                                                <br><span class="label label-success">@s.SlotId</span>
+                                                <br>
+                                            </p>
+                                        }
+                                    }
+                                }
+                             
+
+
+                            }
+                          
+                        </td>
+                        <td>
+                            @foreach (var item2 in listschedule)
+                            {
+
+                                if (item.SlotId == item2.Key && item2.Value.Count != 0)
+                                {
+                                    @foreach (var s in item2.Value)
+                                    {
+                                        if (s.TeachingDay.DayOfWeek == DayOfWeek.Thursday)
+                                        {
+                                            <p>
+
+                                                <a href="">@s.ClassSubject.SubjectId-</a>
+                                                <a class="label label-warning" href="http://flm.fpt.edu.vn/gui/role/guest/ListScheduleSyllabus?subjectCode=K%2btqEEAO0OVd6pVpwO3prA%3d%3d&amp;SessionNo=F9EHvqN%2bdUjlw7x5OhB%2faQ%3d%3d&amp;token=" target="_blank">View Materials</a>
+                                                <br> at @item1.RoomId
+                                                <a class="label label-primary" target="_blank" href="https://fu-edunext.fpt.edu.vn">-@s.ClassSubject.ClassId </a>
+                                                <br>(<font color="Green">attended</font>)<br><span class="label label-success">@item.StartTime-@item.EndTime</span>
+                                                <br><span class="label label-success">@s.TeacherId</span>
+                                                <br><span class="label label-success">@s.TeachingDay</span>
+                                                <br><span class="label label-success">@s.SlotId</span>
+                                                <br>
+                                            </p>
+                                        }
+                                    }
+                                }
+
+
+
+                            }
+
+                        </td>
+                        <td>
+                            @foreach (var item2 in listschedule)
+                            {
+
+                                if (item.SlotId == item2.Key && item2.Value.Count != 0)
+                                {
+                                    @foreach (var s in item2.Value)
+                                    {
+                                        if (s.TeachingDay.DayOfWeek == DayOfWeek.Friday)
+                                        {
+                                            <p>
+
+                                                <a href="">@s.ClassSubject.SubjectId-</a>
+                                                <a class="label label-warning" href="http://flm.fpt.edu.vn/gui/role/guest/ListScheduleSyllabus?subjectCode=K%2btqEEAO0OVd6pVpwO3prA%3d%3d&amp;SessionNo=F9EHvqN%2bdUjlw7x5OhB%2faQ%3d%3d&amp;token=" target="_blank">View Materials</a>
+                                                <br> at @item1.RoomId
+                                                <a class="label label-primary" target="_blank" href="https://fu-edunext.fpt.edu.vn">-@s.ClassSubject.ClassId </a>
+                                                <br>(<font color="Green">attended</font>)<br><span class="label label-success">@item.StartTime-@item.EndTime</span>
+                                                <br><span class="label label-success">@s.TeacherId</span>
+                                                <br><span class="label label-success">@s.TeachingDay</span>
+                                                <br><span class="label label-success">@s.SlotId</span>
+                                                <br>
+                                            </p>
+                                        }
+                                    }
+                                }
+
+
+
+                            }
+
+                        </td>
+                        <td>
+                            @foreach (var item2 in listschedule)
+                            {
+
+                                if (item.SlotId == item2.Key && item2.Value.Count != 0)
+                                {
+                                    @foreach (var s in item2.Value)
+                                    {
+                                        if (s.TeachingDay.DayOfWeek == DayOfWeek.Saturday)
+                                        {
+                                            <p>
+
+                                                <a href="">@s.ClassSubject.SubjectId-</a>
+                                                <a class="label label-warning" href="http://flm.fpt.edu.vn/gui/role/guest/ListScheduleSyllabus?subjectCode=K%2btqEEAO0OVd6pVpwO3prA%3d%3d&amp;SessionNo=F9EHvqN%2bdUjlw7x5OhB%2faQ%3d%3d&amp;token=" target="_blank">View Materials</a>
+                                                <br> at @item1.RoomId
+                                                <a class="label label-primary" target="_blank" href="https://fu-edunext.fpt.edu.vn">-@s.ClassSubject.ClassId </a>
+                                                <br>(<font color="Green">attended</font>)<br><span class="label label-success">@item.StartTime-@item.EndTime</span>
+                                                <br><span class="label label-success">@s.TeacherId</span>
+                                                <br><span class="label label-success">@s.TeachingDay</span>
+                                                <br><span class="label label-success">@s.SlotId</span>
+                                                <br>
+                                            </p>
+                                        }
+                                    }
+                                }
+
+
+
+                            }
+
+                        </td>
+                        <td>
+                            @foreach (var item2 in listschedule)
+                            {
+
+                                if (item.SlotId == item2.Key && item2.Value.Count != 0)
+                                {
+                                    @foreach (var s in item2.Value)
+                                    {
+                                        if (s.TeachingDay.DayOfWeek == DayOfWeek.Sunday)
+                                        {
+                                            <p>
+
+                                                <a href="">@s.ClassSubject.SubjectId-</a>
+                                                <a class="label label-warning" href="http://flm.fpt.edu.vn/gui/role/guest/ListScheduleSyllabus?subjectCode=K%2btqEEAO0OVd6pVpwO3prA%3d%3d&amp;SessionNo=F9EHvqN%2bdUjlw7x5OhB%2faQ%3d%3d&amp;token=" target="_blank">View Materials</a>
+                                                <br> at @item1.RoomId
+                                                <a class="label label-primary" target="_blank" href="https://fu-edunext.fpt.edu.vn">-@s.ClassSubject.ClassId </a>
+                                                <br>(<font color="Green">attended</font>)<br><span class="label label-success">@item.StartTime-@item.EndTime</span>
+                                                <br><span class="label label-success">@s.TeacherId</span>
+                                                <br><span class="label label-success">@s.TeachingDay</span>
+                                                <br><span class="label label-success">@s.SlotId</span>
+                                                <br>
+                                            </p>
+                                        }
+                                    }
+                                }
+
+
+
+                            }
+
+                        </td>
+                        
+                        
+                    }
+               
+                    
+
+                  
+
+                }
+             
+                       
+                    
+                
+                </tr>
+             
+            }
+         
+        @* <tr><td>Slot 1 </td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>**@
+       
+</table>
+
+<script>
+    function redirectToSelectedDate() {
+        var selectElement = document.getElementById("selectDate");
+        var selectElementYear = document.getElementById("selectYear");
+        var selectedDate = selectElement.value;
+        var selectedYear = selectElementYear.value;
+        console.log(selectedDate);
+        console.log(selectedYear);
+        // Chuyển hướng đến một trang khác dựa trên ngày đã chọn
+        window.location.href = "/?week=" + selectedDate + "&yearchoose=" + selectedYear;
+    }
+</script>
+<style>
+    table {
+    background-color: transparent;
+
+}
+
+    table {
+        border-spacing: 0;
+        border-collapse: collapse;
+        width:100%;
+    }
+
+    b, strong {
+        font-weight: 700;
+    }
+
+    .auto-style1 {
+        color: #FF3300;
+    }
+
+    tbody th {
+        text-align: left;
+        padding: 2px;
+    }
+    tr{
+        border-bottom: 1px solid salmon;
+    }
+    th {
+        border-right: 1px solid #fff;
+        text-align: center;
+        padding: 2px;
+        text-transform: uppercase;
+        height: 23px;
+        background-color: #6b90da;
+        font-weight: normal;
+    }
+</style>
